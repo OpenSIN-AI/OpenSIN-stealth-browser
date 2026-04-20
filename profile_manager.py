@@ -101,15 +101,17 @@ class ProfileManager:
         # Fingerprint laden
         fp_gen = FingerprintGenerator(name)
         
+        c_prof = profile["chrome_profile"]
+        gpu = fp_gen.fingerprint["gpu_renderer"]
+        
         self.current_profile = {
             "name": name,
-            "chrome_profile": profile["chrome_profile"],
+            "chrome_profile": c_prof,
             "fingerprint": fp_gen.fingerprint,
             "stealth_js": fp_gen.get_stealth_js(),
         }
         
-        print(f"👤 Profil gewählt: {name} (Chrome: {profile[\'chrome_profile\']}, "
-              f"GPU: {fp_gen.fingerprint[\'gpu_renderer\']})")
+        print(f"👤 Profil gewählt: {name} (Chrome: {c_prof}, GPU: {gpu})")
         
         return self.current_profile
     
@@ -135,6 +137,9 @@ class ProfileManager:
             available = self.get_available_profiles()
             status = "✅" if name in available else "⏳"
             
-            print(f"  {status} {name:20s} Chrome:{data[\'chrome_profile\']:15s} "
-                  f"Benutzt:{data.get(\'use_count\', 0):3d}x  Zuletzt:{last_str}")
+            cp = data[\'chrome_profile\']
+            uc = data.get(\'use_count\', 0)
+            
+            print(f"  {status} {name:20s} Chrome:{cp:15s} "
+                  f"Benutzt:{uc:3d}x  Zuletzt:{last_str}")
         print("-" * 60)

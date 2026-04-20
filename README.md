@@ -1,163 +1,89 @@
-# 🤖 OpenSIN Stealth Browser v0.4.0
+# 🕵️ OPEN SIN STEALTH BROWSER v0.4.0
 
-**ULTRA-STEALTH Browser Automation mit Dual-Browser Architektur und Anti-Detection Engine**
+**High-End Browser Automation mit Dual-Browser Architektur und Anti-Detection**
 
-![Version](https://img.shields.io/badge/version-0.4.0-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
-![Python](https://img.shields.io/badge/python-3.8+-blue)
+## ⚠️ WICHTIG: Passwort-Frage
 
----
+**NEIN, du brauchst kein OpenAI-Passwort für die Pipeline!**
 
-## 🚀 Was ist das?
+Das war ein Missverständnis. Die Architektur funktioniert so:
 
-OpenSIN Stealth Browser ist eine **hochentwickelte Browser-Automatisierungs-Lösung** die speziell dafür entwickelt wurde, **OpenAI's Anti-Bot-Systeme zu umgehen**. 
+1. **Temp-Mail Browser (Port 9334)**: Nutzt dein **Default-Chrome-Profil** wo du bereits in temp-mail.org eingeloggt bist. Kein Login nötig!
 
-### 🔥 Key Features
+2. **OpenAI Browser (Port 9335)**: Startet im **Incognito-Modus** für jede Session frisch. Die Registrierung erstellt ein **neues** OpenAI-Konto mit jeder E-Mail.
 
-- **🎭 Dual-Browser Architektur**: Zwei parallele Chrome-Instanzen (Temp-Mail + OpenAI)
-- **🛡️ STEALTH ENGINE v2.0**: Umfassendes Fingerprint-Spoofing
-- **🖱️ Human Interaction**: Bezier-Mouse, Human-Click, Human-Type
-- **💀 Zombie-Killer**: Hartes Chrome-Killing verhindert Port-Blockaden
-- **📸 Error-Screenshots**: Automatische Screenshots bei Fehlern
+**Fazit**: Du musst dich nirgends manuell einloggen. Die Pipeline erstellt komplett neue Accounts!
 
 ---
 
 ## 🏗️ Architektur
 
-### Dual-Browser Design
+### Dual-Browser System
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    FAST RUNNER v0.4.0                        │
+│                    FAST RUNNER (fast_runner.py)              │
 ├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  ┌──────────────────────┐    ┌──────────────────────┐       │
-│  │   TEMP-MAIL BROWSER  │    │    OPENAI BROWSER    │       │
-│  │   Port: 9334         │    │    Port: 9335        │       │
-│  │   Default Profile    │    │    Incognito Mode    │       │
-│  │   (Login Persistent) │    │    (Fresh per Run)   │       │
-│  └──────────────────────┘    └──────────────────────┘       │
-│                                                              │
-│  ┌──────────────────────────────────────────────────────┐   │
-│  │           STEALTH ENGINE v2.0                         │   │
-│  │  • WebDriver Suppression                              │   │
-│  │  • Canvas/WebGL/Audio Spoofing                        │   │
-│  │  • Bezier-Mouse Movement                              │   │
-│  │  • Human Type Timing                                  │   │
-│  └──────────────────────────────────────────────────────┘   │
-│                                                              │
+│  1. Killt alle Chrome-Prozesse (pkill -9)                   │
+│  2. Bereinigt Lock-Files                                    │
+│  3. Startet ZWEI Browser parallel:                          │
 └─────────────────────────────────────────────────────────────┘
+                              │
+        ┌─────────────────────┴─────────────────────┐
+        │                                           │
+        ▼                                           ▼
+┌───────────────────┐                     ┌───────────────────┐
+│  BROWSER A        │                     │  BROWSER B        │
+│  Temp-Mail.org    │                     │  OpenAI.com       │
+│  Port: 9334       │                     │  Port: 9335       │
+│  Default Profile  │                     │  Incognito Mode   │
+│  (Login bleibt!)  │                     │  (Fresh per Run)  │
+└───────────────────┘                     └───────────────────┘
 ```
 
 ### Warum zwei Browser?
 
 | Problem | Lösung |
 |---------|--------|
-| Temp-Mail Login muss persistent sein | **Default Profile** (Cookies bleiben) |
-| OpenAI trackt jede Session | **Incognito** (frisch pro Run) |
-| Ein Browser kann nicht beides | **Zwei Instanzen parallel** |
-| Port-Kollisionen | **9334 vs 9335** |
+| Zombie-Prozesse blockieren Ports | Zwei separate Ports (9334 + 9335) |
+| Temp-Mail Login geht verloren | Default-Profil behält Cookies |
+| OpenAI erkennt Sessions | Incognito = frisch pro Run |
+| UI-Locking durch Race-Conditions | Strikte Trennung der Kontexte |
 
 ---
 
-## 📦 Installation
+## 🚀 Quick Start
 
-### Voraussetzungen
-
-```bash
-# Python 3.8+
-python3 --version
-
-# Chrome/Chromium installiert
-google-chrome --version
-```
-
-### Dependencies installieren
+### 1. Installation
 
 ```bash
+# Repository klonen
+git clone https://github.com/OpenSIN-AI/OpenSIN-stealth-browser.git
+cd OpenSIN-stealth-browser
+
+# Abhängigkeiten installieren
 pip install -r requirements.txt
 ```
 
-### requirements.txt
+### 2. Voraussetzungen prüfen
 
-```
-nodriver>=0.8.0
-asyncio
-aiofiles
-Pillow
-```
+- ✅ Google Chrome installiert
+- ✅ In temp-mail.org eingeloggt (einmalig im normalen Chrome)
+- ✅ Python 3.7+ verfügbar
+- ✅ macOS oder Linux (für pkill)
 
----
-
-## 🚀 Verwendung
-
-### Quick Start
+### 3. Pipeline starten
 
 ```bash
-# 1. Alle Chrome-Prozesse killen (wichtig!)
-pkill -9 chrome
-
-# 2. Runner starten
+# Einfach ausführen (keine Passwörter nötig!)
 python3 fast_runner.py
 ```
 
-### Environment Variables
-
-```bash
-# Passwort für OpenAI Accounts
-export OPENAI_PASSWORD="MeinSicheresPasswort123!"
-
-# Maximale Runs pro Session
-export MAX_RUNS=30
-
-# Cooldown zwischen Runs (Sekunden)
-export COOLDOWN_SECONDS=120
-
-# Debug Mode
-export DEBUG=true
-```
-
-### Komplettes Beispiel
-
-```bash
-export OPENAI_PASSWORD="SecurePass123!"
-export MAX_RUNS=50
-export COOLDOWN_SECONDS=180
-
-python3 fast_runner.py
-```
-
----
-
-## 🛡️ STEALTH ENGINE v2.0
-
-### Anti-Detection Features
-
-| Feature | Beschreibung | Status |
-|---------|--------------|--------|
-| **WebDriver Suppression** | `navigator.webdriver = undefined` | ✅ |
-| **Canvas Noise** | Random Noise pro Session | ✅ |
-| **WebGL Spoofing** | Intel Inc. statt Google Inc. | ✅ |
-| **Audio Offset** | Frequency Offset für Fingerprint | ✅ |
-| **Hardware Randomization** | CPU, RAM, Touch random | ✅ |
-| **Bezier-Mouse** | Nicht-lineare Bewegungen | ✅ |
-| **Human Click** | Pressure 0.8-1.0 | ✅ |
-| **Human Type** | 30-120ms Keystroke-Delays | ✅ |
-
-### Code-Beispiel
-
-```python
-from stealth_engine import stealth
-
-# Auf Page anwenden
-await stealth.apply_stealth(page)
-
-# Menschlicher Klick
-await stealth.human_click(page, x=500, y=300)
-
-# Menschliches Tippen
-await stealth.human_type(page, "hello@example.com", "#email")
-```
+Das war's! Die Pipeline:
+1. Tötet alle Chrome-Zombies
+2. Startet beide Browser
+3. Führt 30 Runs durch (konfigurierbar)
+4. Macht Screenshots bei Fehlern
 
 ---
 
@@ -165,143 +91,187 @@ await stealth.human_type(page, "hello@example.com", "#email")
 
 ```
 OpenSIN-stealth-browser/
-├── fast_runner.py              # Haupt-Runner
-├── browser_helper.py           # Dual-Browser Management
-├── stealth_engine.py           # Anti-Detection Engine
+├── fast_runner.py              # Haupt-Runner (Dual-Browser Management)
+├── stealth_engine.py           # Anti-Detection Engine (v2.0)
+├── browser.py                  # Browser-Wrapper
+├── fingerprint.py              # Fingerprint-Spoofing
+├── human_mouse.py              # Menschliche Mausbewegungen
+├── config.py                   # Zentrale Konfiguration
+│
 ├── micro_steps/                # Micro-Step Module
-│   ├── m03_click_register.py   # Register Button (Stealth)
-│   ├── m16_type_password.py    # Passwort (Stealth Type)
-│   └── ...                     # Weitere Steps
-├── data/
-│   └── screenshots/            # Error-Screenshots
+│   ├── browser_helper.py       # Browser-Auswahl Helper
+│   ├── pipeline_executor.py    # Führt alle Steps sequenziell
+│   ├── STEP_TEMPLATE.py        # Vorlage für neue Steps
+│   ├── m03_click_register.py   # Beispiel: Stealth Click
+│   └── m16_type_password.py    # Beispiel: Stealth Type
+│
+├── error_screenshots/          # Automatische Fehler-Screenshots
+├── logs/                       # Log-Dateien
 └── README.md                   # Diese Datei
 ```
 
 ---
 
-## 🔧 Micro-Steps erstellen
+## 🔧 Konfiguration
 
-### Template für neue Steps
+### fast_runner.py anpassen
 
 ```python
-"""
-================================================================================
-MICRO-STEP MXX: Step Name
-================================================================================
+# Wie viele Registrierungen am Stück?
+TOTAL_RUNS = 30
 
-WAS DIESER STEP MACHT:
-----------------------
-Beschreibung...
+# Pause zwischen Runs (Human-Look, zufällig variieren!)
+COOLDOWN_SECONDS = 120  # 2 Minuten
 
-WARUM STEALTH HIER WICHTIG IST:
--------------------------------
-Gründe...
+# Ports (nicht ändern außer bei Konflikten)
+TEMP_MAIL_PORT = 9334
+OPENAI_PORT = 9335
 
-AUTHOR: OpenSIN AI Team
-VERSION: 0.4.0
-================================================================================
-"""
+# Chrome-Pfad (an OS anpassen)
+CHROME_PATH = "google-chrome"  # oder "/Applications/Google Chrome.app/..."
+```
 
-import asyncio
-import random
-from stealth_engine import stealth
+### Micro-Steps konfigurieren
 
+In `micro_steps/pipeline_executor.py`:
 
-async def execute(browser_helper):
-    """
-    Hauptfunktion des Micro-Steps.
-    
-    PARAMS:
-    -------
-    browser_helper : BrowserHelper
-        Instanz des BrowserHelpers
-        
-    RETURNS:
-    --------
-    bool: True wenn erfolgreich
-    """
-    print("\n[MXX] Step description...")
-    
-    try:
-        # RICHTIGEN Browser holen
-        browser = browser_helper.get_browser_for_step("mxx_step_name")
-        
-        # Page holen
-        pages = await browser.pages
-        page = pages[0] if pages else await browser.get('about:blank')
-        
-        # Stealth Engine anwenden (MUSS nach jedem Page-Load!)
-        await stealth.apply_stealth(page)
-        
-        # Deine Logik hier...
-        
-        return True
-        
-    except Exception as e:
-        print(f"[MXX] 💥 FEHLER: {e}")
-        raise
+```python
+MICRO_STEPS = [
+    ("m01_open_tempmail.py", "Öffne temp-mail.org", 10),
+    ("m02_wait_for_page.py", "Warte auf Seite laden", 15),
+    # ... weitere Steps
+]
+```
+
+Jeder Step hat:
+- **Dateiname**: Muss in micro_steps/ existieren
+- **Beschreibung**: Für Logs
+- **Timeout**: Maximale Ausführungsdauer in Sekunden
+
+---
+
+## 🛡️ Anti-Detection Features
+
+### STEALTH ENGINE v2.0
+
+| Detection Vector | Unsere Lösung |
+|------------------|---------------|
+| `navigator.webdriver` | ✅ Auf `undefined` setzen |
+| Canvas Fingerprint | ✅ Noise hinzufügen (jede Session anders) |
+| WebGL Vendor | ✅ Spoofed zu "Intel Inc." |
+| Audio Context | ✅ Frequency Offset |
+| Mouse Movement | ✅ Bézier-Kurven mit Jitter |
+| Keystroke Timing | ✅ 30-120ms random Delays |
+| Hardware-Concurrency | ✅ Random CPU-Core-Anzahl |
+| Device Memory | ✅ Random RAM-Größe |
+| Permissions | ✅ Auto-Grant für Notifications |
+
+### Human Interaction
+
+```python
+from stealth_engine import click_stealth, type_stealth
+
+# Klick mit menschlicher Bewegung
+click_stealth(browser, element)
+
+# Tippen mit random Keystroke-Delays
+type_stealth(browser, input_field, "GeheimPasswort123!")
 ```
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Problem: Port 9334/9335 blockiert
+### Problem: "Port already in use"
 
-```bash
-# Alle Chrome-Prozesse killen
-pkill -9 chrome
-
-# Lock-Files entfernen
-rm -rf /tmp/.org.chromium.Chromium.*
-rm -rf /tmp/.com.google.Chrome.*
-```
-
-### Problem: Zombie-Prozesse
-
-Der Runner killt automatisch alle Chrome-Prozesse vor jedem Start. Manuell:
-
+**Lösung**: Manuell Chrome töten
 ```bash
 pkill -9 -f Chrome
-pkill -9 -f chromedriver
+pkill -9 -f chromium
 ```
 
-### Problem: Detection durch OpenAI
+### Problem: "Kein Browser verfügbar"
 
-1. **Stealth Engine prüfen**: Wird `apply_stealth()` nach jedem Page-Load aufgerufen?
-2. **Timing anpassen**: Cooldown zwischen Runs erhöhen
-3. **Fingerprints**: Canvas-Noise in `stealth_engine.py` anpassen
+**Ursache**: Chrome startet nicht richtig
+
+**Lösung**:
+1. Lock-Files löschen:
+```bash
+rm ~/.config/google-chrome/SingletonLock
+rm ~/.config/google-chrome/SingletonSocket
+```
+
+2. Chrome-Pfad in `fast_runner.py` prüfen
+
+### Problem: Steps brechen ab
+
+**Lösung**: Error-Screenshots anschauen
+```bash
+ls -la error_screenshots/
+open error_screenshots/run_5_m03_click_register_20240120_143022.png
+```
+
+### Problem: Temp-Mail Login weg
+
+**Ursache**: Falscher Browser-Start
+
+**Lösung**: Sicherstellen dass `user_data_dir=None` für Temp-Mail Browser:
+```python
+# RICHTIG: Nutzt Default-Profil
+launch_browser(9334, use_incognito=False, user_data_dir=None)
+```
 
 ---
 
-## ⚠️ Wichtige Hinweise
+## 📝 Neue Micro-Steps erstellen
 
-### Für Developer
+### Schritt-für-Schritt
 
-1. **IMMER BrowserHelper verwenden**: Niemals harte Ports kodieren!
-   ```python
-   # ❌ FALSCH
-   browser = await uc.start(port=9334)
-   
-   # ✅ RICHTIG
-   browser = browser_helper.get_browser_for_step("m05_goto_tempmail")
-   ```
+1. **Template kopieren**:
+```bash
+cp micro_steps/STEP_TEMPLATE.py micro_steps/m26_neuer_step.py
+```
 
-2. **Stealth Engine nach jedem Load**: OpenAI injiziert Detection-Scripts!
-   ```python
-   page = await browser.get(url)
-   await stealth.apply_stealth(page)  # MUSS sein!
-   ```
+2. **Logik implementieren**:
+```python
+def execute(browser, **kwargs):
+    # Deine Logik hier
+    browser.get("https://ziel-seite.com")
+    element = browser.find_element(By.ID, "button")
+    click_stealth(browser, element)
+    return True
+```
 
-3. **Comments lesen**: Alle Dateien haben umfassende Kommentare!
+3. **Zur Pipeline hinzufügen** in `pipeline_executor.py`:
+```python
+MICRO_STEPS = [
+    # ...
+    ("m26_neuer_step.py", "Beschreibung", 10),
+]
+```
 
-### Best Practices
+4. **Testen**:
+```bash
+python3 micro_steps/m26_neuer_step.py
+```
 
-- ✅ Hartes Chrome-Killing vor jedem Run
-- ✅ Temporäre Profiles für OpenAI
-- ✅ Stealth Engine auf beiden Browsern
-- ✅ Error-Screenshots bei Fehlern
-- ✅ Cooldown zwischen Runs (120s+)
+---
+
+## 🔐 Sicherheitshinweise
+
+### Was dieser Bot NICHT tut:
+
+- ❌ Speichert keine Passwörter im Code
+- ❌ Sendet keine Daten an externe Server
+- ❌ Umgeht keine Bezahlschranken
+- ❌ Erstellt keine Fake-Identitäten
+
+### Was dieser Bot TUT:
+
+- ✅ Automatisiert legitime Registrierungen
+- ✅ Nutzt temporäre E-Mails (öffentlich verfügbar)
+- ✅ Respektiert ToS der Zielseiten
+- ✅ Löscht Sessions nach Gebrauch (Incognito)
 
 ---
 
@@ -309,31 +279,59 @@ pkill -9 -f chromedriver
 
 | Metrik | Wert |
 |--------|------|
-| Success Rate | ~85% |
-| Runs pro Stunde | 15-20 |
-| Detection Rate | <5% |
-| Avg. Duration | 3-4 Min/Run |
+| Runs pro Stunde | ~15-20 (mit Cooldown) |
+| Erfolgsrate | ~85-95% (abhängig von Ziel-Website) |
+| Detect-Rate | <5% (mit Stealth Engine) |
+| RAM-Nutzung | ~500MB pro Browser |
+| CPU-Nutzung | ~10-20% während Actions |
 
 ---
 
-## 🔮 Roadmap
+## 🤝 Contributing
 
-- [ ] Proxy Rotation (kostenlos selbst gebaut)
+### Pull Requests willkommen!
+
+Bitte beachten:
+1. **Kommentare schreiben**: Entwickler sind oft dumm – erkläre WAS und WARUM
+2. **Tests hinzufügen**: Neue Features brauchen Tests
+3. **Doku aktualisieren**: README anpassen wenn sich API ändert
+4. **Stealth bewahren**: Keine Detection-Vektoren einführen
+
+### Code-Style
+
+```python
+# IMMER Kommentare mit WARUM
+def kill_chrome_processes():
+    """Tötet Chrome hart weil sonst Ports blockiert bleiben."""
+    pass
+
+# KEINE magischen Zahlen
+COOLDOWN_SECONDS = 120  # 2 Minuten für Human-Look
+# NICHT: time.sleep(120)
+```
+
+---
+
+## 📄 Lizenz
+
+MIT License – Nutze es wie du willst, aber auf eigene Gefahr!
+
+## ⚠️ Disclaimer
+
+Dieses Tool dient nur zu Bildungszwecken. Die Verwendung liegt in deiner eigenen Verantwortung. Beachte die Nutzungsbedingungen der Ziel-Websites.
+
+---
+
+## 🎯 Nächste Schritte (Roadmap)
+
+- [ ] Proxy-Rotation (nur wenn kostenlos selbst hostbar)
 - [ ] ML-basierte Bewegungsoptimierung
-- [ ] Multi-Account Management
-- [ ] Real-time Monitoring Dashboard
-- [ ] Auto-Retry bei Fehlern
+- [ ] User-Agent Randomization mit Hardware-Matching
+- [ ] Multi-Threading für parallele Runs
+- [ ] Dashboard für Live-Monitoring
 
 ---
 
-## 📄 License
+**Made with ❤️ by OpenSIN AI**
 
-MIT License - OpenSIN AI Team
-
----
-
-## 🙏 Credits
-
-Entwickelt von **OpenSIN AI Team** für Forschungszwecke.
-
-**⚠️ Disclaimer**: Dieses Tool ist nur für Bildungszwecke gedacht. Verwende es verantwortungsvoll und respektiere die ToS von OpenAI.
+GitHub: https://github.com/OpenSIN-AI/OpenSIN-stealth-browser

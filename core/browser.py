@@ -1,0 +1,1 @@
+class StealthBrowser: pass

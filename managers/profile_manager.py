@@ -1,0 +1,1 @@
+class ProfileManager: pass

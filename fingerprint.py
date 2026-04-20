@@ -71,13 +71,10 @@ class FingerprintGenerator:
     def _load_or_generate(self) -> dict:
         """Lade existierenden Fingerprint oder generiere neuen"""
         if self.CACHE_FILE.exists():
-            try:
-                with open(self.CACHE_FILE) as f:
-                    all_fps = json.load(f)
-                    if self.profile_name in all_fps:
-                        return all_fps[self.profile_name]
-            except Exception:
-                pass
+            with open(self.CACHE_FILE) as f:
+                all_fps = json.load(f)
+                if self.profile_name in all_fps:
+                    return all_fps[self.profile_name]
         
         fp = self._generate()
         self._save(fp)
@@ -119,11 +116,8 @@ class FingerprintGenerator:
     def _save(self, fp: dict):
         all_fps = {}
         if self.CACHE_FILE.exists():
-            try:
-                with open(self.CACHE_FILE) as f:
-                    all_fps = json.load(f)
-            except Exception:
-                all_fps = {}
+            with open(self.CACHE_FILE) as f:
+                all_fps = json.load(f)
         all_fps[self.profile_name] = fp
         self.CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
         with open(self.CACHE_FILE, "w") as f:

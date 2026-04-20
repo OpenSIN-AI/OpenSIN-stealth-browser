@@ -65,9 +65,9 @@ class SessionManager:
             session_data = json.loads(decrypted)
             
             age_hours = (time.time() - session_data["timestamp"]) / 3600
-            num_cookies = len(session_data["cookies"])
+            cookie_count = len(session_data["cookies"])
             print(f"📂 Session geladen: {self.profile_name} "
-                  f"({num_cookies} Cookies, {age_hours:.1f}h alt)")
+                  f"({cookie_count} Cookies, {age_hours:.1f}h alt)")
             
             return session_data
         except Exception as e:

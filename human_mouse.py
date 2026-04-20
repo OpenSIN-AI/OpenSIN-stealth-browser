@@ -124,7 +124,7 @@ async def move_mouse_human(target_x, target_y):
     # Anzahl Kontrollpunkte basierend auf Distanz
     num_controls = 2 if distance > 200 else 1
     
-    # Bezier-Curve generieren
+    # Bezier-Kurve generieren
     controls = generate_control_points(start, end, num_controls)
     num_points = max(20, min(Config.MOUSE_CURVE_POINTS, int(distance / 5)))
     curve_points = bezier_curve(start, end, controls, num_points)

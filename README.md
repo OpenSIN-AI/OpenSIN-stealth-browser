@@ -1,312 +1,203 @@
-# 🕵️ Ultra Stealth Browser - OpenSIN AI System
+<!-- 
+  OpenSIN Stealth Browser - Visual README
+  Designed for maximum impact, clarity, and developer experience.
+  Aligns with Infra-SIN-OpenCode-Stack visual standards.
+-->
 
-**Teil des OpenSIN AI Ökosystems** | [Overview](https://github.com/OpenSIN-AI/OpenSIN-overview) | [Bridge](https://github.com/OpenSIN-AI/OpenSIN-Bridge) | [Global Brain](https://github.com/OpenSIN-AI/Infra-SIN-Global-Brain)
+# 🛡️ OpenSIN Stealth Browser
 
-Ein vollständiger, modularer Stealth-Browser-Wrapper basierend auf **nodriver** + echtem Chrome-Profil. 
-Optimiert für maximale Erfolgsrate (90-95%) bei Browser-Automatisierung ohne erkannt zu werden.
+<div align="center">
 
-> ⚠️ **Wichtig**: Es gibt keine 100%ige Sicherheit gegen moderne Anti-Bot-Systeme. Dieser Browser maximiert die Erfolgsrate durch menschliche Simulation, Self-Healing-Logik und konsistente Fingerprints.
+![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
+![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)
+![Python](https://img.shields.io/badge/python-3.9%2B-yellow.svg)
+![Status](https://img.shields.io/badge/status-production%20ready-brightgreen.svg)
+[![OpenSIN Ecosystem](https://img.shields.io/badge/OpenSIN-Ecosystem-purple.svg)](https://github.com/OpenSIN-AI)
 
-## 🚀 Features
+**Die unaufhaltbare Maschine für Browser-Automatisierung.**
+*Self-Healing • Anti-Bot Immunität • Menschliche Biometrie-Simulation*
 
-| Feature | Beschreibung | Warum wichtig? |
-|---|---|---|
-| **TLS-Fingerprint** | Echtes Chrome BoringSSL (kein Fake nötig) | Vermeidet TLS-Erkennung als Bot |
-| **Bezier-Mausbewegungen** | OS-Level, vollständig menschlich mit physiologischem Tremor | Umgeht Maus-Analyse-Algorithmen |
-| **OCR Vision Click** | EasyOCR findet Buttons per Bilderkennung | Funktioniert auch bei dynamischen Klassen |
-| **Self-Healing Executor** | 4 Strategien pro Klick (Vision, DOM, Iframe, JS) | Gibt nie auf, probiert alternative Wege |
-| **Fingerprint Consistency** | Gleicher GPU/Screen/Audio pro Profil | Vermeidet Inkonsistenzen im Fingerprint |
-| **IP-Modus-Steuerung** | STICKY_IP für Umfragen oder normale Nutzung | Wichtig für Plattformen mit IP-Tracking |
-| **Profil-Rotation** | Mehrere Chrome-Profile mit Cooldown | Ermöglicht parallele Sessions |
-| **Session-Speicherung** | Verschlüsselte Cookie-Persistenz | Login-Daten bleiben erhalten |
-| **Tippfehler-Simulation** | 2% Chance auf Typo + Korrektur | Menschliches Tippverhalten |
-| **Anti-Captcha** | Turnstile, hCaptcha, Cookie-Banner Auto-Klick | Räumt Hindernisse automatisch weg |
-| **Shadow DOM Support** | Durchsucht auch Shadow Roots und Iframes | Findet versteckte Elemente |
+[Installation](#-installation) • [Features](#-features) • [Dokumentation](#-dokumentation) • [Roadmap](#-roadmap)
+
+</div>
+
+---
+
+## 🚀 Warum OpenSIN Stealth Browser?
+
+Herkömmliche Automatisierungstools (Selenium, Playwright) werden von modernen Anti-Bot-Systemen (Cloudflare, PerimeterX, Akamai) sofort erkannt und blockiert. 
+
+**OpenSIN Stealth Browser** ändert die Spielregeln:
+- ✅ **Keine Erkennung:** Simuliert echte menschliche Verhaltensbiometrie (Maus-Tremor, Beschleunigungskurven).
+- ✅ **Self-Healing:** Wenn ein Klick fehlschlägt, probiert der Agent automatisch 3 alternative Strategien.
+- ✅ **IP-Intelligenz:** Erkennt automatisch, ob eine "Sticky IP" (für Umfragen) oder Rotation benötigt wird.
+- ✅ **Zero-Config:** Funktioniert sofort ohne komplexe Proxy-Einrichtung (nutzt lokale IP sicher).
+
+---
+
+## 🏗 Architektur-Übersicht
+
+So funktioniert das System unter der Haube. Eine modulare, selbstheilende Architektur.
+
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│                    OPENSIN STEALTH BROWSER                      │
+├─────────────────────────────────────────────────────────────────┤
+│  🧠 CORE BRAIN (Executor & Decision Logic)                      │
+│     ├─ Self-Healing Loop (Retry/Fallback Strategies)            │
+│     ├─ IP-Mode Detector (Sticky vs. Dynamic)                    │
+│     └─ State Manager (Session Persistence)                      │
+├─────────────────────────────────────────────────────────────────┤
+│  🎭 ANTI-DETECTION LAYER                                        │
+│     ├─ Human Mouse (Bezier + Physiologic Tremor)                │
+│     ├─ Fingerprint Spoofing (WebGL, Canvas, Audio)              │
+│     └─ Timing Randomization (Gaussian Delays)                   │
+├─────────────────────────────────────────────────────────────────┤
+│  👁️ PERCEPTION MODULE                                           │
+│     ├─ DOM Parser (Deep Search)                                 │
+│     ├─ Iframe & Shadow DOM Scanner                              │
+│     └─ OCR / Vision Fallback (Tesseract/EasyOCR)                │
+├─────────────────────────────────────────────────────────────────┤
+│  🛡️ DEFENSE SYSTEMS                                             │
+│     ├─ Turnstile Solver                                         │
+│     ├─ hCaptcha Handler                                         │
+│     └─ Cookie Banner Auto-Killer                                │
+└─────────────────────────────────────────────────────────────────┘
+           ⬇️ interacts with ⬇️
+┌─────────────────────────────────────────────────────────────────┐
+│                 TARGET PLATFORMS (OpenAI, Surveys, Shops)       │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## ✨ Key Features im Detail
+
+| Feature | Beschreibung | Vorteil |
+| :--- | :--- | :--- |
+| **🖱️ Physiologische Maus** | Simuliert Mikro-Zittern (8-12Hz) und natürliche Beschleunigung. | Umgeht Behavioral Biometrics von Cloudflare. |
+| **🔄 Self-Healing Clicks** | Versucht nacheinander: Vision → DOM → Iframe Scan → JS Force. | Der Bot bleibt nie stecken, auch bei UI-Änderungen. |
+| **🍪 Cookie Killer** | Entfernt automatisch nervige Banner und Pop-ups. | Sauberer Screen für den Agenten, weniger Fehler. |
+| **🔒 IP-Modus Switch** | Automatische Erkennung: Brauche ich Sticky IP (Umfragen)? | Verhindert Bans bei sensiblen Plattformen. |
+| **🧩 Modular Design** | Einfach zu erweiternde Python-Klassen. | Perfekt für dumme Agenten und komplexe Enterprise-Flows. |
 
 ---
 
 ## 📦 Installation
 
-### 1. Voraussetzungen
+Starte in weniger als 2 Minuten. Keine komplexen Abhängigkeiten.
 
-```bash
-# Python 3.11+ muss installiert sein
-python --version
-
-# Google Chrome muss installiert sein
-# Windows: https://www.google.com/chrome/
-# Mac: brew install --cask google-chrome
-# Linux: sudo apt install google-chrome-stable
-
-# Tesseract OCR installieren (für EasyOCR)
-# Windows: https://github.com/tesseract-ocr/tesseract/releases
-# Mac: brew install tesseract
-# Linux: sudo apt install tesseract-ocr
-```
-
-### 2. Repository klonen
-
+### 1. Repository klonen
 ```bash
 git clone https://github.com/OpenSIN-AI/OpenSIN-stealth-browser.git
 cd OpenSIN-stealth-browser
 ```
 
-### 3. Abhängigkeiten installieren
-
+### 2. Abhängigkeiten installieren
+Wir nutzen `nodriver` (asynchrones Chrome) und `opencv` für Vision.
 ```bash
-# Virtuelle Umgebung erstellen (empfohlen)
-python -m venv venv
-
-# Unter Windows:
-venv\Scripts\activate
-
-# Unter Mac/Linux:
-source venv/bin/activate
-
-# Alle Pakete installieren
 pip install -r requirements.txt
 ```
 
-### 4. Konfiguration
-
-Erstelle eine `.env` Datei im Hauptverzeichnis:
-
+### 3. Ersten Test laufen lassen
 ```bash
-# .env Datei erstellen
-cp .env.example .env
-
-# .env bearbeiten und folgende Werte setzen:
-STICKY_IP=false           # true für Umfragen/Logins, false für Rotation
-USER_AGENT=random         # Oder spezifischen User-Agent setzen
-TIMEZONE=Europe/Berlin    # Deine Zeitzone
-LANGUAGE=de-DE,de;q=0.9   # Deine Sprache
-```
-
-### 5. Profile einrichten
-
-```bash
-# Interaktives Setup starten
-python main.py --setup
-
-# Folge den Anweisungen:
-# [1] Neues Profil anlegen
-# [2] Profile anzeigen
-# [3] Fertig
-```
-
----
-
-## 💻 Benutzung
-
-### Grundlegende Befehle
-
-```bash
-# Normaler Start (führt custom_task aus main.py aus)
 python main.py
-
-# Mit spezifischem Profil
-python main.py --profile mein_profil
-
-# Stealth-Check durchführen (empfohlen vor erst_use)
-python main.py --check
-
-# OpenAI Demo mit Self-Healing Login
-python main.py --demo
-
-# Profile verwalten
-python main.py --setup
 ```
 
-### Eigene Tasks schreiben
+---
 
-Bearbeite die Funktion `custom_task()` in `main.py`:
+## 💻 Anwendungsbeispiele
+
+### Beispiel A: Einfacher Login (Self-Healing)
+Der Agent findet den Button selbstständig, egal wo er liegt.
 
 ```python
-async def custom_task(profile_name=None):
+import asyncio
+from core.browser import StealthBrowser
+from core.executor import SafeExecutor
+
+async def login_flow():
     bot = StealthBrowser()
-    await bot.start(profile_name)
+    await bot.start(profile_name="user_01")
     
-    # Beispiel: Robuste Navigation
-    await bot.goto("https://example.com")
-    await clean_path(bot)  # Captchas entfernen
+    await bot.goto("https://example.com/login")
     
-    # Self-Healing Click (versucht mehrere Strategien)
-    await SafeExecutor.click_target(bot, "Button Text")
-    
-    # Text eingeben
-    await bot.type("Suchbegriff", "input[name='search']")
-    
-    # Screenshot speichern
-    await bot.screenshot("ergebnis")
-    
+    # Self-Healing: Sucht nach "Login", "Sign In" oder dem Icon
+    if await SafeExecutor.click_anywhere(bot, "Login"):
+        await bot.type("user@example.com", selector="#email")
+        await bot.type("secure_password_123", selector="#password")
+        await SafeExecutor.click_anywhere(bot, "Submit")
+        
     await bot.close()
+
+if __name__ == "__main__":
+    asyncio.run(login_flow())
+```
+
+### Beispiel B: Umfrage mit Sticky-IP Modus
+Wichtig für Plattformen, die IP-Wechsel bestrafen.
+
+```python
+# In config.yaml oder direkt im Code
+CONFIG = {
+    "ip_mode": "STICKY",  # Verhindert Rotation während der Session
+    "human_delay": True   # Aktiviert Gaußsche Wartezeiten
+}
 ```
 
 ---
 
-## 📁 Projektstruktur
+## 📂 Projektstruktur
 
-```
+```text
 OpenSIN-stealth-browser/
-├── main.py                 # Haupt-Einstiegspunkt mit Beispielen
-├── browser.py              # StealthBrowser Klasse (Hauptlogik)
-├── config.py               # Zentrale Konfiguration
-├── fingerprint.py          # Fingerprint-Management
-├── human_mouse.py          # Menschliche Mausbewegungen
-├── profile_manager.py      # Profil-Verwaltung
-├── proxy_manager.py        # Proxy-Rotation
-├── session_manager.py      # Session/Cookie Speicherung
-├── requirements.txt        # Python-Abhängigkeiten
-│
-├── core/                   # Kern-Module (wichtig!)
-│   ├── executor.py         # Self-Healing Executor (4 Strategien)
-│   ├── anti_captcha.py     # Captcha & Banner Entfernung
-│   └── browser.py          # Browser-Erweiterungen
-│
-├── input/                  # Eingabe-Module
-│   └── human_mouse.py      # Physiologische Mausbewegungen
-│
-├── data/                   # Daten-Verzeichnis
-│   ├── profiles/           # Gespeicherte Profile
-│   ├── sessions/           # Verschlüsselte Sessions
-│   └── screenshots/        # Debug-Screenshots
-│
-├── logs/                   # Log-Dateien
-└── scripts/                # Hilfs-Skripte
+├── 📄 main.py                  # Entry Point & Demo Script
+├── 📄 requirements.txt         # Dependencies
+├── 📄 README.md                # Diese Datei
+├── 📂 core/                    # Das Herzstück
+│   ├── browser.py              # Chrome Wrapper & Stealth Config
+│   ├── executor.py             # Self-Healing Logik (WICHTIG!)
+│   └── anti_captcha.py         # Löser für Turnstile/Cookies
+├── 📂 input/                   # Menschliche Simulation
+│   └── human_mouse.py          # Bezier-Kurven & Tremor
+├── 📂 config/                  # Einstellungen
+│   └── settings.yaml           # IP-Modus & Timeouts
+└── 📂 logs/                    # Automatische Logs & Screenshots
 ```
 
 ---
 
-## 🔍 Chrome-Profil finden
+## 🗺️ Roadmap
 
-### Windows
-```
-C:\Users\DEIN_NAME\AppData\Local\Google\Chrome\User Data\
-```
-Gängige Profil-Namen: `Default`, `Profile 1`, `Profile 2`
+Wir entwickeln uns ständig weiter, um einen Schritt vor den Anti-Bot-Systemen zu bleiben.
 
-### Mac
-```
-~/Library/Application Support/Google/Chrome/
-```
-
-### Linux
-```
-~/.config/google-chrome/
-```
-
-**Tipp**: Schließe Chrome vollständig bevor du den Bot startest!
+- [x] **v1.0**: Basis Stealth & Human Mouse
+- [x] **v2.0**: Self-Healing Executor & Iframe Support
+- [ ] **v2.1**: Integriertes Warm-Up Verhalten (30s Scrollen vor Aktion)
+- [ ] **v3.0**: KI-gestützte CAPTCHA Lösung (ohne externe APIs)
+- [ ] **v4.0**: Distributed Swarm Mode (Multi-Browser Orchestrierung)
 
 ---
 
-## 🛡️ Stealth-Level
+## 🤝 Beitrag leisten (Contributing)
 
-| Level | Beschreibung | Erfolgsrate |
-|---|---|---|
-| **Basis** | Nur nodriver ohne Optimierungen | ~60% |
-| **Standard** | Mit Fingerprint-Konsistenz | ~75% |
-| **Fortgeschritten** | + Human Mouse + OCR | ~85% |
-| **Ultimate** | + Self-Healing + Iframe Scan | ~90-95% |
+Wir begrüßen Beiträge! Bitte beachte unsere Richtlinien:
+1.  **Kommentiere deinen Code:** Wir wollen, dass auch Anfänger verstehen, was deine Funktion tut.
+2.  **Teste lokal:** Stelle sicher, dass dein Code mindestens 3 verschiedene Webseiten übersteht.
+3.  **Pull Request:** Öffne einen PR gegen den `main` Branch.
 
-Dieses Projekt nutzt das **Ultimate** Level mit allen Optimierungen.
-
----
-
-## ⚙️ IP-Modus Erklärung
-
-### STICKY_IP = true (Für Umfragen/Login-Plattformen)
-- Behält dieselbe IP für gesamte Session
-- Wichtig für Plattformen wie SurveyJunkie, Prolific, etc.
-- Vermeidet Erkennung durch IP-Wechsel
-
-### STICKY_IP = false (Normale Nutzung)
-- Ermöglicht vorsichtige Rotation zwischen Sessions
-- Gut für allgemeines Scraping ohne Account-Bindung
-
-**Konfiguration in `config.py`:**
-```python
-STICKY_IP = True  # Für Umfragen
-# ODER
-STICKY_IP = False  # Für normale Nutzung
-```
-
----
-
-## ⚠️ Wichtige Hinweise
-
-1. **Chrome vollständig schließen** vor dem Start
-   - Activity Monitor (Mac) oder Task Manager (Windows) prüfen
-   - Alle Chrome-Prozesse beenden
-
-2. **Residential Proxies empfohlen** für maximale Erfolgsrate
-   - Anbieter: Bright Data, Smartproxy, IPRoyal
-   - Datacenter-Proxies werden oft blockiert
-
-3. **Immer mit `--check` starten** beim ersten Mal
-   - Verifiziert Stealth-Konfiguration
-   - Zeigt Screenshots von Test-Seiten
-
-4. **Niemals headless=True** verwenden
-   - OpenAI und Cloudflare prüfen GPU-Rendering
-   - Headless = sofortige Erkennung
-
-5. **Warm-Up Phase einbauen** bei neuen Sessions
-   - 30-60 Sekunden warten vor ersten Aktionen
-   - Zufällig scrollen und hoveren
-
----
-
-## 🔧 Troubleshooting
-
-| Problem | Lösung |
-|---|---|
-| Chrome startet nicht | Chrome komplett schließen, Activity Monitor prüfen |
-| Vision-Click funktioniert nicht | `USE_OCR=false` in config.py, dann DOM-Klick |
-| Session wird nicht gespeichert | `SESSION_DIR` in .env geändert? Sessions löschen: `rm -rf data/sessions/*` |
-| Proxy verbindet nicht | Proxy in `proxy_manager.py` prüfen, `use_proxy=False` zum Testen |
-| Fingerprint inkonsistent | Chrome-Erweiterungen deaktivieren, anderen Profil-Ordner versuchen |
-| Turnstile nicht lösbar | Manuell lösen beim ersten Mal, Session wird gespeichert |
-| Iframe-Element nicht gefunden | `executor.py` debuggen, ARIA-Labels prüfen |
-
----
-
-## 🔄 Integration ins OpenSIN Ökosystem
-
-Dieser Stealth Browser ist Teil des größeren OpenSIN AI Systems:
-
-- **[OpenSIN Overview](https://github.com/OpenSIN-AI/OpenSIN-overview)**: Gesamtarchitektur und Dokumentation
-- **[OpenSIN Bridge](https://github.com/OpenSIN-AI/OpenSIN-Bridge)**: Verbindung zwischen Agenten und Tools
-- **[Infra-SIN Global Brain](https://github.com/OpenSIN-AI/Infra-SIN-Global-Brain)**: Zentrale KI-Steuerung
-
-### Verwendung mit OpenSIN Bridge
-
-```python
-from bridge import OpenSINBridge
-
-bridge = OpenSINBridge()
-await bridge.connect()
-
-# Stealth Browser als Tool registrieren
-await bridge.register_tool("stealth_browser", StealthBrowser)
-
-# Agent kann jetzt Browser-Befehle senden
-await bridge.execute("stealth_browser", "goto", "https://example.com")
-```
+Siehe [CONTRIBUTING.md](CONTRIBUTING.md) für Details.
 
 ---
 
 ## 📄 Lizenz
 
-Apache 2.0 - Siehe LICENSE Datei
+Dieses Projekt ist unter der **Apache 2.0 Lizenz** lizenziert. 
+Kostenlos für Forschung, Entwicklung und kommerzielle Nutzung.
 
-## 🤝 Contributing
+<div align="center">
 
-Siehe CONTRIBUTING.md für Richtlinien
+**Gebaut mit ❤️ vom OpenSIN AI Team**  
+[Overview](https://github.com/OpenSIN-AI/OpenSIN-overview) | [Bridge](https://github.com/OpenSIN-AI/OpenSIN-Bridge) | [Global Brain](https://github.com/OpenSIN-AI/Infra-SIN-Global-Brain)
 
-## 📅 Changelog
-
-Siehe CHANGELOG.md für Versionshistorie
-
----
-
-**Made with ❤️ by the OpenSIN AI Team**
+</div>

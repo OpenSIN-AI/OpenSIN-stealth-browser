@@ -1,17 +1,25 @@
 """
-ULTRA STEALTH BROWSER - Main Entry Point
+ULTRA STEALTH BROWSER - Main Entry Point (Final Version with Self-Healing)
 
 Usage:
     python main.py                    # Normaler Start
     python main.py --check           # Stealth-Check
     python main.py --profile NAME    # Bestimmtes Profil
     python main.py --setup           # Profile einrichten
+    python main.py --demo            # OpenAI Demo mit Self-Healing
 """
 import asyncio
 import sys
+import logging
 from browser import StealthBrowser
 from profile_manager import ProfileManager
 from config import Config
+from core.executor import SafeExecutor
+from core.anti_captcha import clean_path
+
+# Logging konfigurieren
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 
 # ============================================================
@@ -79,93 +87,132 @@ async def run_stealth_check(profile_name=None):
 
 
 # ============================================================
-# DEMO: OpenAI Chat
+# DEMO: OpenAI Chat mit Self-Healing Executor
 # ============================================================
 
 async def demo_openai(profile_name=None):
-    """Demo: OpenAI Chat öffnen"""
-    bot = StealthBrowser()
-    await bot.start(profile_name)
-    
-    # Stealth Check
-    await bot.check_stealth()
-    
-    # Zu OpenAI navigieren
-    await bot.goto("https://chat.openai.com")
-    await bot.think(3, 6)
-    
-    # Screenshot zum Debugging
-    await bot.screenshot("openai_start")
-    
-    # Wenn Login nötig
-    url = await bot.get_url()
-    if "auth" in url or "login" in url:
-        print("🔐 Login erforderlich...")
+    """Demo: OpenAI Chat mit robuster Self-Healing Logik"""
+    bot = None
+    try:
+        bot = StealthBrowser()
+        await bot.start(profile_name)
         
-        # Email eingeben
-        await bot.click("Log in")
-        await bot.think(2, 4)
+        # Stealth Check
+        await bot.check_stealth()
         
-        email = input("Email eingeben: ").strip()
-        await bot.type(email, "input[type='email']")
-        await bot.think(0.5, 1.5)
+        # Zu OpenAI navigieren
+        logger.info("🌐 Navigiere zu https://chat.openai.com")
+        await bot.goto("https://chat.openai.com")
         
-        await bot.click("Continue")
-        await bot.think(2, 4)
+        # Pfad säubern (Captchas, Cookie-Banner)
+        await clean_path(bot)
         
-        password = input("Passwort eingeben: ").strip()
-        await bot.type(password, "input[type='password']")
-        await bot.think(0.5, 1.5)
+        # Screenshot zum Debugging
+        await bot.screenshot("openai_start")
         
-        await bot.click("Continue")
-        await bot.think(4, 7)
+        # Wenn Login nötig
+        url = await bot.get_url()
+        if "auth" in url or "login" in url:
+            logger.info("🔐 Login erforderlich...")
+            
+            # Self-Healing Click für Login
+            if await SafeExecutor.click_target(bot, "Log in"):
+                await bot.think(2, 4)
+                
+                # Email eingeben
+                email = input("Email eingeben: ").strip()
+                await bot.type(email, "input[type='email']")
+                await bot.think(0.5, 1.5)
+                
+                # Continue klicken mit Self-Healing
+                await SafeExecutor.click_target(bot, "Continue")
+                await bot.think(2, 4)
+                
+                # Passwort eingeben
+                password = input("Passwort eingeben: ").strip()
+                await bot.type(password, "input[type='password']")
+                await bot.think(0.5, 1.5)
+                
+                # Continue klicken mit Self-Healing
+                await SafeExecutor.click_target(bot, "Continue")
+                await bot.think(4, 7)
+                
+                await bot.screenshot("openai_after_login")
+                logger.info("✅ Login erfolgreich!")
+            else:
+                logger.error("❌ Konnte Login-Flow nicht starten.")
+                await bot.screenshot("error_login_flow")
+        else:
+            logger.info("✅ Bereits eingeloggt!")
         
-        await bot.screenshot("openai_after_login")
-    
-    print("\n✅ OpenAI Chat geladen!")
-    print("Browser bleibt offen. Du kannst jetzt manuell weiterarbeiten.")
-    
-    # Session speichern
-    await bot.save_session()
-    
-    input("\nEnter = Browser schließen...")
-    await bot.close()
+        # Session speichern
+        await bot.save_session()
+        logger.info("💾 Session gespeichert.")
+        
+        print("\n✅ OpenAI Chat geladen!")
+        print("Browser bleibt offen. Du kannst jetzt manuell weiterarbeiten.")
+        
+        input("\nEnter = Browser schließen...")
+        
+    except Exception as e:
+        logger.critical(f"💥 Kritischer Fehler: {e}", exc_info=True)
+        if bot:
+            await bot.screenshot("crash_state")
+    finally:
+        if bot:
+            await bot.close()
+            logger.info("🔒 Browser geschlossen.")
 
 
 # ============================================================
-# CUSTOM TASK
+# CUSTOM TASK mit Self-Healing
 # ============================================================
 
 async def custom_task(profile_name=None):
     """
     Hier kannst du deinen eigenen Task schreiben.
-    Der Bot ist voll konfiguriert und ready.
+    Der Bot ist voll konfiguriert und ready mit Self-Healing.
     """
-    bot = StealthBrowser()
-    await bot.start(profile_name)
-    
-    # ====== DEIN CODE HIER ======
-    
-    await bot.goto("https://example.com")
-    await bot.think(2, 4)
-    
-    # Vision-Click auf beliebigen Button
-    await bot.click("Some Button Text")
-    
-    # Text eingeben
-    await bot.type("Hello World", "input[name='search']")
-    
-    # Scrollen
-    await bot.scroll_down(3)
-    await bot.think(1, 2)
-    
-    # Screenshot
-    await bot.screenshot("result")
-    
-    # ====== DEIN CODE ENDE ======
-    
-    input("\nEnter = Browser schließen...")
-    await bot.close(save=True)
+    bot = None
+    try:
+        bot = StealthBrowser()
+        await bot.start(profile_name)
+        
+        # ====== DEIN CODE HIER ======
+        
+        # Beispiel: Robuste Navigation mit Self-Healing
+        await bot.goto("https://example.com")
+        await clean_path(bot)  # Captchas/Banner entfernen
+        await bot.think(2, 4)
+        
+        # Vision-Click mit Self-Healing (versucht mehrere Strategien)
+        await SafeExecutor.click_target(bot, "Some Button Text")
+        
+        # Text eingeben
+        await bot.type("Hello World", "input[name='search']")
+        
+        # Scrollen
+        await bot.scroll_down(3)
+        await bot.think(1, 2)
+        
+        # Screenshot
+        await bot.screenshot("result")
+        
+        # ====== DEIN CODE ENDE ======
+        
+        # Session speichern
+        await bot.save_session()
+        
+        input("\nEnter = Browser schließen...")
+        
+    except Exception as e:
+        logger.critical(f"💥 Kritischer Fehler: {e}", exc_info=True)
+        if bot:
+            await bot.screenshot("crash_state")
+    finally:
+        if bot:
+            await bot.close(save=True)
+            logger.info("🔒 Browser geschlossen.")
 
 
 # ============================================================
@@ -192,15 +239,16 @@ async def main():
         await demo_openai(profile)
         return
     
-    # Standard: Custom Task
+    # Standard: Custom Task mit Self-Healing
     await custom_task(profile)
 
 
 if __name__ == "__main__":
     print("""
     ╔══════════════════════════════════════════╗
-    ║     ULTRA STEALTH BROWSER v1.0           ║
-    ║     nodriver + Vision + Bezier + OCR     ║
+    ║     ULTRA STEALTH BROWSER v2.0           ║
+    ║     Self-Healing + Anti-Captcha          ║
+    ║     Human Mouse + Iframe Support         ║
     ╚══════════════════════════════════════════╝
     """)
     

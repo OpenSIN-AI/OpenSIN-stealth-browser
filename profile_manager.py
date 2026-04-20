@@ -137,8 +137,8 @@ class ProfileManager:
             available = self.get_available_profiles()
             status = "✅" if name in available else "⏳"
             
-            cp = data[\'chrome_profile\']
-            uc = data.get(\'use_count\', 0)
+            cp = data["chrome_profile"]
+            uc = data.get("use_count", 0)
             
             print(f"  {status} {name:20s} Chrome:{cp:15s} "
                   f"Benutzt:{uc:3d}x  Zuletzt:{last_str}")

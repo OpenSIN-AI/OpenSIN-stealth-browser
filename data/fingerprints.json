@@ -1,0 +1,43 @@
+{
+  "crashtest": {
+    "gpu_vendor": "Apple",
+    "gpu_renderer": "Apple M3 Pro",
+    "screen_width": 2560,
+    "screen_height": 1440,
+    "color_depth": 24,
+    "device_pixel_ratio": 1,
+    "timezone": "Europe/London",
+    "timezone_offset": 0,
+    "fonts": [
+      "Arial",
+      "Helvetica",
+      "Helvetica Neue",
+      "Times New Roman",
+      "Courier New",
+      "Georgia",
+      "Palatino",
+      "Bookman",
+      "Comic Sans MS",
+      "Trebuchet MS",
+      "Arial Black",
+      "Impact",
+      "Lucida Grande",
+      "Tahoma",
+      "Verdana",
+      "Monaco",
+      "Menlo",
+      "SF Pro Text",
+      "SF Pro Display"
+    ],
+    "canvas_noise": 3e-05,
+    "audio_sample_rate": 44100,
+    "hardware_concurrency": 16,
+    "device_memory": 16,
+    "max_touch_points": 0,
+    "languages": [
+      "en-US",
+      "en"
+    ],
+    "platform": "Linux x86_64"
+  }
+}

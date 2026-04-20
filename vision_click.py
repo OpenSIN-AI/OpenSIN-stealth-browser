@@ -143,7 +143,9 @@ async def vision_find_and_click(page, text: str, browser_offset_y=85):
     
     if matches:
         best = matches[0]
-        print(f"✅ OCR gefunden: '{best[\'text\']}' (Confidence: {best[\'confidence\']:.2f})")
+        t = best["text"]
+        c = best["confidence"]
+        print(f"✅ OCR gefunden: '{t}' (Confidence: {c:.2f})")
         
         # Koordinaten mit Browser-Offset
         click_x = best["center_x"]

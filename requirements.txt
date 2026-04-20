@@ -1,0 +1,2 @@
+nodriver>=0.38
+easyocr>=1.7

@@ -1,6 +1,10 @@
+"""
+Zentrale Konfiguration - Einmal anpassen, fertig.
+"""
 from pathlib import Path
 import platform
 import os
+
 class Config:
     SYSTEM = platform.system()
     if SYSTEM == "Darwin":
@@ -27,7 +31,7 @@ class Config:
     THINK_TIME_MIN = 1.5
     THINK_TIME_MAX = 4.5
     USE_VISION_CLICKS = True
-    OCR_LANGUAGES = ["en", "de"]
+    OCR_LANGUAGES = [\'en\', \'de\']
     OCR_CONFIDENCE = 0.55
     SCREENSHOT_DIR = Path("data/screenshots")
     USE_PROXY = False
@@ -41,5 +45,4 @@ class Config:
         cls.SCREENSHOT_DIR.mkdir(parents=True, exist_ok=True)
         cls.SESSION_DIR.mkdir(parents=True, exist_ok=True)
         Path("data").mkdir(exist_ok=True)
-if __name__ == "__main__":
-    Config.init_dirs()
+Config.init_dirs()

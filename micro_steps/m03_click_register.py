@@ -1,140 +1,93 @@
+#!/usr/bin/env python3
 """
-================================================================================
-MICRO-STEP M03: Click Register Button mit STEALTH ENGINE
-================================================================================
+OPEN SIN STEALTH BROWSER - Micro-Step: Registrieren klicken (v0.5.0)
 
-WAS DIESER STEP MACHT:
-----------------------
-Klickt auf den "Register" oder "Sign Up" Button auf der OpenAI Login-Seite.
+WAS: Sucht den 'Registrieren' oder 'Sign Up' Button auf OpenAI/chatgpt.com und klickt ihn.
+WARUM: Startet den Account-Erstellungsflow. Nutzt ID-basierten Klick für Zuverlässigkeit.
 
-WARUM STEALTH HIER WICHTIG IST:
--------------------------------
-OpenAI trackt JEDEN Klick! Ein robotischer Klick = SOFORT GEBLOCKT!
-Dieser Step verwendet:
-- Bezier-Mouse Movement (nicht linear!)
-- Human Click Pressure (0.8-1.0 force)
-- Random Delays vor/nach dem Klick
-
-VERWENDUNG:
------------
-from browser_helper import BrowserHelper
-
-async def execute(browser_helper: BrowserHelper):
-    browser = browser_helper.get_browser_for_step("m03_click_register")
-    page = await browser_helper.get_page_for_step("m03_click_register")
-    
-    # Stealth Click ausführen
-    success = await human_stealth_click(page, "Register")
-    
-    return success
-
-AUTHOR: OpenSIN AI Team
-VERSION: 0.4.0
-================================================================================
+ACHTUNG FÜR ENTWICKLER:
+- Nicht ändern ohne Testing! JS-Selector sind empfindlich.
+- Port 9334 = Temp-Mail Browser (Default Profile mit Login).
+- Kein Passwort nötig, Pipeline erstellt NEUE Accounts automatisch.
+- 0% User Interaction erforderlich!
 """
 
 import asyncio
-import random
-from stealth_engine import stealth
+import nodriver as uc
+import sys
 
+# JavaScript zum Finden des Registrieren-Buttons
+# WARUM: OpenAI verwendet React, normale Clicks funktionieren nicht immer.
+# Dieser Script sucht nach Text-Mustern in allen Links/Buttons.
+_FIND_REG = """(function(){
+    var links = Array.from(document.querySelectorAll("a, button"));
+    var reg = links.find(l => {
+        var t = (l.innerText||l.textContent||"").toLowerCase().trim();
+        return t.includes("registrieren") || t.includes("sign up") || t.includes("get started") || t.includes("create account");
+    });
+    if(reg) {
+        reg.setAttribute("id", "mcp_reg_btn");
+        return true;
+    }
+    return false;
+})()"""
 
-async def execute(browser_helper):
+async def run():
     """
-    Hauptfunktion des Micro-Steps.
+    Hauptfunktion: Verbindet mit Browser (Port 9334), findet Tab, klickt Button.
     
-    PARAMS:
-    -------
-    browser_helper : BrowserHelper
-        Instanz des BrowserHelpers für Dual-Browser Management
-        
-    RETURNS:
-    --------
-    bool: True wenn erfolgreich, False sonst
-    
-    RAISES:
-    -------
-    Exception: Wenn kritischer Fehler auftritt
+    Rückgabe: True bei Erfolg, False bei Fehler.
     """
-    print("\n[M03] Clicking Register Button...")
+    # Verbinde mit existierendem Browser (Singleton Patch in fast_runner.py)
+    # WARUM: Port 9334 ist der Temp-Mail Browser mit Default-Profil (Login bleibt!)
+    b = await uc.start(host="127.0.0.1", port=9334)
     
-    try:
-        # RICHTIGEN Browser holen (OpenAI Incognito)
-        browser = browser_helper.get_browser_for_step("m03_click_register")
-        
-        # Aktuelle Page holen
-        pages = await browser.pages
-        if not pages:
-            page = await browser.get('https://auth.openai.com')
-        else:
-            page = pages[0]
-        
-        # Stealth Engine anwenden (MUSS nach jedem Page-Load!)
-        await stealth.apply_stealth(page)
-        
-        # Nach Register-Button suchen (verschiedene Selector probieren)
-        selectors = [
-            'a[href*="signup"]',
-            'a[href*="register"]',
-            'button:contains("Sign up")',
-            'button:contains("Register")',
-            '[data-testid="signup-button"]',
-        ]
-        
-        element = None
-        for selector in selectors:
-            try:
-                element = await page.select(selector)
-                if element:
-                    break
-            except:
-                continue
-        
-        if not element:
-            # Fallback: Text-Suche
-            element = await page.find("Sign up", best_match=True)
-        
-        if not element:
-            element = await page.find("Register", best_match=True)
-        
-        if not element:
-            print("[M03] ❌ Register Button nicht gefunden!")
-            await page.screenshot("m03_no_button.png")
-            return False
-        
-        # Element ins Viewport scrollen
-        await element.scroll_into_view()
-        await asyncio.sleep(random.uniform(0.3, 0.6))
-        
-        # Position berechnen mit Random-Offset (nicht immer gleiche Stelle!)
-        box = await element.get_position()
-        if not box:
-            print("[M03] ❌ Konnte Button-Position nicht bestimmen!")
-            return False
-        
-        # Zufällige Position innerhalb des Elements (wie echte User!)
-        x = int(box[0] + random.randint(20, box[3] - 20))
-        y = int(box[1] + random.randint(10, box[4] - 10))
-        
-        # STEALTH CLICK ausführen (Bezier-Kurve + Pressure!)
-        print(f"[M03] 🖱️  Performing stealth click at ({x}, {y})...")
-        success = await stealth.human_click(page, x, y, clicks=1)
-        
-        if success:
-            print("[M03] ✅ Register Button geklickt!")
-            
-            # Warten bis Seite lädt (random für menschliches Timing)
-            await asyncio.sleep(random.uniform(2.0, 4.0))
-            
-            # Erneut Stealth anwenden nach Navigation
-            await stealth.apply_stealth(page)
-            
-            return True
-        else:
-            print("[M03] ❌ Stealth Click fehlgeschlagen!")
-            await page.screenshot("m03_click_failed.png")
-            return False
-            
-    except Exception as e:
-        print(f"[M03] 💥 KRITISCHER FEHLER: {e}")
-        raise
+    # WICHTIG: Verhindert dass nodriver den Browser beim Schließen killt
+    b._browser_process = None
+    b._process_pid = None
 
+    # Suche echten Tab (nicht chrome:// oder about:blank)
+    # WARUM: Browser hat oft leere Tabs, wir brauchen den mit OpenAI-Seite.
+    t = None
+    for tab in b.tabs:
+        url = getattr(tab.target, "url", "") or ""
+        if not url.startswith("chrome://"):
+            t = tab
+            break
+    
+    if not t:
+        print("M03 FAIL: Kein echter Tab gefunden!")
+        return False
+
+    # Warte bis Seite wirklich geladen ist (URL muss chatgpt.com oder openai.com sein)
+    # WARUM: Seite lädt eventuell noch, JS würde sonst fehlschlagen.
+    for i in range(20):  # Max 10 Sekunden warten
+        url = getattr(t.target, "url", "") or ""
+        if "chatgpt.com" in url or "openai.com" in url:
+            break
+        await asyncio.sleep(0.5)
+
+    # Führe JS aus um Button zu finden und ID zu setzen
+    found = await t.evaluate(_FIND_REG)
+    
+    if found:
+        print("M03 OK: 'Registrieren' Button gefunden, klicke...")
+        # Klicke via ID (zuverlässiger als QuerySelector)
+        await t.evaluate("document.getElementById('mcp_reg_btn').click();")
+        return True
+
+    # Fallback: Vielleicht sind wir schon direkt auf der Create-Account Seite
+    # WARUM: Manchmal leitet OpenAI direkt weiter, kein Button nötig.
+    url = getattr(t.target, "url", "") or ""
+    if "create-account" in url or "signup" in url:
+        print("M03 OK: Direkt auf Create-Account Seite, kein Klick nötig.")
+        return True
+
+    # Fehlerfall: Button nicht gefunden
+    print("M03 FAIL: 'Registrieren' Button nicht gefunden!")
+    print(f"  Aktuelle URL: {getattr(t.target, 'url', 'unbekannt')}")
+    return False
+
+if __name__ == "__main__":
+    # Exit-Code: 0 = Erfolg, 1 = Fehler (für Pipeline-Executor wichtig!)
+    sys.exit(0 if asyncio.run(run()) else 1)

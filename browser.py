@@ -65,12 +65,18 @@ class StealthBrowser:
         # 7. Session wiederherstellen
         await self.session_mgr.restore(self.page)
         
+        p_name = self.profile["name"]
+        c_prof = self.profile["chrome_profile"]
+        gpu = self.profile["fingerprint"]["gpu_renderer"]
+        proxy = self.proxy_mgr._mask(self.proxy_mgr.get_current())
+        vision = 'AN' if Config.USE_VISION_CLICKS else 'AUS'
+        
         print(f"\n🚀 STEALTH BROWSER GESTARTET")
-        print(f"   Profil: {self.profile[\'name\']}")
-        print(f"   Chrome: {self.profile[\'chrome_profile\']}")
-        print(f"   GPU: {self.profile[\'fingerprint\'][\'gpu_renderer\']}")
-        print(f"   Proxy: {self.proxy_mgr._mask(self.proxy_mgr.get_current())}")
-        print(f"   Vision: {'AN' if Config.USE_VISION_CLICKS else 'AUS'}")
+        print(f"   Profil: {p_name}")
+        print(f"   Chrome: {c_prof}")
+        print(f"   GPU: {gpu}")
+        print(f"   Proxy: {proxy}")
+        print(f"   Vision: {vision}")
         print()
         
         return self

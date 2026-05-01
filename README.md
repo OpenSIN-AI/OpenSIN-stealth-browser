@@ -43,12 +43,12 @@ Das war ein Missverständnis. Die Architektur funktioniert so:
 
 ### Warum zwei Browser?
 
-| Problem | Lösung |
-|---------|--------|
+| Problem                          | Lösung                            |
+| -------------------------------- | --------------------------------- |
 | Zombie-Prozesse blockieren Ports | Zwei separate Ports (9334 + 9335) |
-| Temp-Mail Login geht verloren | Default-Profil behält Cookies |
-| OpenAI erkennt Sessions | Incognito = frisch pro Run |
-| UI-Locking durch Race-Conditions | Strikte Trennung der Kontexte |
+| Temp-Mail Login geht verloren    | Default-Profil behält Cookies     |
+| OpenAI erkennt Sessions          | Incognito = frisch pro Run        |
+| UI-Locking durch Race-Conditions | Strikte Trennung der Kontexte     |
 
 ---
 
@@ -80,6 +80,7 @@ python3 fast_runner.py
 ```
 
 Das war's! Die Pipeline:
+
 1. Tötet alle Chrome-Zombies
 2. Startet beide Browser
 3. Führt 30 Runs durch (konfigurierbar)
@@ -144,6 +145,7 @@ MICRO_STEPS = [
 ```
 
 Jeder Step hat:
+
 - **Dateiname**: Muss in micro_steps/ existieren
 - **Beschreibung**: Für Logs
 - **Timeout**: Maximale Ausführungsdauer in Sekunden
@@ -154,17 +156,17 @@ Jeder Step hat:
 
 ### STEALTH ENGINE v2.0
 
-| Detection Vector | Unsere Lösung |
-|------------------|---------------|
-| `navigator.webdriver` | ✅ Auf `undefined` setzen |
-| Canvas Fingerprint | ✅ Noise hinzufügen (jede Session anders) |
-| WebGL Vendor | ✅ Spoofed zu "Intel Inc." |
-| Audio Context | ✅ Frequency Offset |
-| Mouse Movement | ✅ Bézier-Kurven mit Jitter |
-| Keystroke Timing | ✅ 30-120ms random Delays |
-| Hardware-Concurrency | ✅ Random CPU-Core-Anzahl |
-| Device Memory | ✅ Random RAM-Größe |
-| Permissions | ✅ Auto-Grant für Notifications |
+| Detection Vector      | Unsere Lösung                             |
+| --------------------- | ----------------------------------------- |
+| `navigator.webdriver` | ✅ Auf `undefined` setzen                 |
+| Canvas Fingerprint    | ✅ Noise hinzufügen (jede Session anders) |
+| WebGL Vendor          | ✅ Spoofed zu "Intel Inc."                |
+| Audio Context         | ✅ Frequency Offset                       |
+| Mouse Movement        | ✅ Bézier-Kurven mit Jitter               |
+| Keystroke Timing      | ✅ 30-120ms random Delays                 |
+| Hardware-Concurrency  | ✅ Random CPU-Core-Anzahl                 |
+| Device Memory         | ✅ Random RAM-Größe                       |
+| Permissions           | ✅ Auto-Grant für Notifications           |
 
 ### Human Interaction
 
@@ -185,8 +187,9 @@ type_stealth(browser, input_field, "GeheimPasswort123!")
 ### Problem: "Port already in use"
 
 **Lösung**: Manuell Chrome töten
+
 ```bash
-pkill -9 -f Chrome
+NIEMALS – BANNED (semgrep Regel)
 pkill -9 -f chromium
 ```
 
@@ -195,7 +198,9 @@ pkill -9 -f chromium
 **Ursache**: Chrome startet nicht richtig
 
 **Lösung**:
+
 1. Lock-Files löschen:
+
 ```bash
 rm ~/.config/google-chrome/SingletonLock
 rm ~/.config/google-chrome/SingletonSocket
@@ -206,6 +211,7 @@ rm ~/.config/google-chrome/SingletonSocket
 ### Problem: Steps brechen ab
 
 **Lösung**: Error-Screenshots anschauen
+
 ```bash
 ls -la error_screenshots/
 open error_screenshots/run_5_m03_click_register_20240120_143022.png
@@ -216,6 +222,7 @@ open error_screenshots/run_5_m03_click_register_20240120_143022.png
 **Ursache**: Falscher Browser-Start
 
 **Lösung**: Sicherstellen dass `user_data_dir=None` für Temp-Mail Browser:
+
 ```python
 # RICHTIG: Nutzt Default-Profil
 launch_browser(9334, use_incognito=False, user_data_dir=None)
@@ -228,11 +235,13 @@ launch_browser(9334, use_incognito=False, user_data_dir=None)
 ### Schritt-für-Schritt
 
 1. **Template kopieren**:
+
 ```bash
 cp micro_steps/STEP_TEMPLATE.py micro_steps/m26_neuer_step.py
 ```
 
 2. **Logik implementieren**:
+
 ```python
 def execute(browser, **kwargs):
     # Deine Logik hier
@@ -243,6 +252,7 @@ def execute(browser, **kwargs):
 ```
 
 3. **Zur Pipeline hinzufügen** in `pipeline_executor.py`:
+
 ```python
 MICRO_STEPS = [
     # ...
@@ -251,6 +261,7 @@ MICRO_STEPS = [
 ```
 
 4. **Testen**:
+
 ```bash
 python3 micro_steps/m26_neuer_step.py
 ```
@@ -277,13 +288,13 @@ python3 micro_steps/m26_neuer_step.py
 
 ## 📊 Performance
 
-| Metrik | Wert |
-|--------|------|
-| Runs pro Stunde | ~15-20 (mit Cooldown) |
-| Erfolgsrate | ~85-95% (abhängig von Ziel-Website) |
-| Detect-Rate | <5% (mit Stealth Engine) |
-| RAM-Nutzung | ~500MB pro Browser |
-| CPU-Nutzung | ~10-20% während Actions |
+| Metrik          | Wert                                |
+| --------------- | ----------------------------------- |
+| Runs pro Stunde | ~15-20 (mit Cooldown)               |
+| Erfolgsrate     | ~85-95% (abhängig von Ziel-Website) |
+| Detect-Rate     | <5% (mit Stealth Engine)            |
+| RAM-Nutzung     | ~500MB pro Browser                  |
+| CPU-Nutzung     | ~10-20% während Actions             |
 
 ---
 
@@ -292,6 +303,7 @@ python3 micro_steps/m26_neuer_step.py
 ### Pull Requests willkommen!
 
 Bitte beachten:
+
 1. **Kommentare schreiben**: Entwickler sind oft dumm – erkläre WAS und WARUM
 2. **Tests hinzufügen**: Neue Features brauchen Tests
 3. **Doku aktualisieren**: README anpassen wenn sich API ändert
